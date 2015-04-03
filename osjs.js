@@ -38,8 +38,6 @@ function Osjs(){
 					//error => queue
 					self.queue(url, data);
 				}
-				
-				console.log("xhr resp : " + xmlhttp.responseText);
 			}
 		}
 		xmlhttp.open("POST", url, true);
@@ -85,8 +83,6 @@ function Osjs(){
 							self.datas.push(data.batch[i]);
 						}
 					}
-					//response todo
-					console.log("import resp : " + xmlhttp.responseText);
 				}
 			}
 			xmlhttp.open("POST", "https://api.segment.io/v1/import", true);
