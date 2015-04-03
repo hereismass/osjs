@@ -13,7 +13,7 @@ function Osjs(){
 
 	//xhr func
 	this.xhr = function(url, data){
-		//we add timestamp to data
+		//we add timestamp to data, if there is not one present
 		var d = new Date();
 		var t = d.toISOString(); //segment need timestamp at ISO format
 		data.timestamp = t;
@@ -30,11 +30,11 @@ function Osjs(){
 			if(xmlhttp.readyState==4){
 				if(xmlhttp.status == 200){
 					//success, we can send the queue if there is one
-					osjs.sendQueue();
+					self.sendQueue();
 				}
 				else{
 					//error => queue
-					osjs.queue(url, data);
+					self.queue(url, data);
 				}
 				//response todo
 				console.log("xhr resp : " + xmlhttp.responseText + ' ' + xmlhttp.status);
@@ -48,7 +48,10 @@ function Osjs(){
 	}
 
 	this.queue = function(url, data){
-		//todo
+		var a = url.split("/").pop(); //we get the action name from the url
+		//we merge the action into the data, so that we can use import 
+		data.action = a;
+		self.datas.push(data);
 	}
 
 	this.sendQueue = function(){
@@ -57,38 +60,38 @@ function Osjs(){
 
 	//identify
 	this.identify = function(data){
-		xhr("https://api.segment.io/v1/identify", data);
+		self.xhr("https://api.segment.io/v1/identify", data);
 	}
 
 	//group
 	this.group = function(data){
-		xhr("https://api.segment.io/v1/group", data);
+		self.xhr("https://api.segment.io/v1/group", data);
 	}
 
 	//track
 	this.track = function(data){
-		xhr("https://api.segment.io/v1/track", data);
+		self.xhr("https://api.segment.io/v1/track", data);
 	}
 
 	//page
 	this.page = function(data){
-		xhr("https://api.segment.io/v1/page", data);
+		self.xhr("https://api.segment.io/v1/page", data);
 	}
 
 	//screen
 	this.screen = function(data){
-		xhr("https://api.segment.io/v1/screen", data);
+		self.xhr("https://api.segment.io/v1/screen", data);
 	}
 
 	//alias
 	this.alias = function(data){
-		xhr("https://api.segment.io/v1/alias", data);
+		self.xhr("https://api.segment.io/v1/alias", data);
 	}
 
-	//import
-	this.import = function(data){
-		xhr("https://api.segment.io/v1/import", data);
-	}
+	//import to make compatible with queue system
+	/*this.import = function(data){
+		self.xhr("https://api.segment.io/v1/import", data);
+	}*/
 }
 
 var osjs = new Osjs();
