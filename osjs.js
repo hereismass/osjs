@@ -13,10 +13,12 @@ function Osjs(){
 
 	//xhr func
 	this.xhr = function(url, data){
-		//we add timestamp to data, if there is not one present
-		var d = new Date();
-		var t = d.toISOString(); //segment need timestamp at ISO format
-		data.timestamp = t;
+		//we add timestamp to data, if there is not one already present
+		if(!data.timestamp){
+			var d = new Date();
+			var t = d.toISOString(); //segment need timestamp at ISO format
+			data.timestamp = t;
+		}
 		var xmlhttp;
 		if (window.XMLHttpRequest){
 			// code for IE7+, Firefox, Chrome, Opera, Safari
