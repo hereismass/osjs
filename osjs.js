@@ -38,8 +38,8 @@ function Osjs(){
 					//error => queue
 					self.queue(url, data);
 				}
-				//response todo
-				console.log("xhr resp : " + xmlhttp.responseText + ' ' + xmlhttp.status);
+				
+				console.log("xhr resp : " + xmlhttp.responseText);
 			}
 		}
 		xmlhttp.open("POST", url, true);
@@ -57,7 +57,48 @@ function Osjs(){
 	}
 
 	this.sendQueue = function(){
-		//todo
+		if(self.datas.length !== 0){
+			//we have some stored data => we send it
+			//we create the data with the queue
+			var data = {
+				"batch":self.datas
+			};
+			//we empty the queue
+			self.datas = [];
+			var xmlhttp;
+			if (window.XMLHttpRequest){
+				// code for IE7+, Firefox, Chrome, Opera, Safari
+			    xmlhttp=new XMLHttpRequest();
+			}
+			else{
+				// code for IE6, IE5
+			    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange = function(){
+				if(xmlhttp.readyState==4){
+					if(xmlhttp.status == 200){
+						//it worked. nothing to do.
+					}
+					else{	
+						//it didnt work. higly improbable. but we repopulate the queue
+						for(var i=0;i<data.batch.length;i++){
+							self.datas.push(data.batch[i]);
+						}
+					}
+					//response todo
+					console.log("import resp : " + xmlhttp.responseText);
+				}
+			}
+			xmlhttp.open("POST", "https://api.segment.io/v1/import", true);
+			xmlhttp.setRequestHeader("Authorization", "Basic " + btoa(self.write_key + ":" + null));
+			xmlhttp.setRequestHeader("Content-type","application/json");
+			//xmlhttp.setRequestHeader("Content-length", data.length);
+			xmlhttp.send(JSON.stringify(data));
+
+		}
+		else{
+			//queue empty. we do nothing
+		}
 	}
 
 	//identify
