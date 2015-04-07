@@ -1,6 +1,7 @@
 //osjs main class
 function Osjs(){
 	this.write_key = null;
+	this.anonymousId = null;
 	this.datas = [];
 	var self = this;
 
@@ -8,6 +9,15 @@ function Osjs(){
 	this.setOptions = function(options){
 		if(options.write_key){
 			self.write_key = options.write_key;
+		}
+
+		if(options.anonymousId){
+			//if an anon id is passed, we save it
+			self.anonymousId = options.anonymousId;
+		}
+		else{
+			//no anon id, we generate one in case we need it.
+			self.anonymousId = Math.floor(Math.random() * 0xfffffffffffff);
 		}
 	}
 
@@ -99,26 +109,41 @@ function Osjs(){
 
 	//identify
 	this.identify = function(data){
+		if(!data.anonymousId){
+			data.anonymousId = self.anonymousId;
+		}
 		self.xhr("https://api.segment.io/v1/identify", data);
 	}
 
 	//group
 	this.group = function(data){
+		if(!data.anonymousId){
+			data.anonymousId = self.anonymousId;
+		}
 		self.xhr("https://api.segment.io/v1/group", data);
 	}
 
 	//track
 	this.track = function(data){
+		if(!data.anonymousId){
+			data.anonymousId = self.anonymousId;
+		}
 		self.xhr("https://api.segment.io/v1/track", data);
 	}
 
 	//page
 	this.page = function(data){
+		if(!data.anonymousId){
+			data.anonymousId = self.anonymousId;
+		}
 		self.xhr("https://api.segment.io/v1/page", data);
 	}
 
 	//screen
 	this.screen = function(data){
+		if(!data.anonymousId){
+			data.anonymousId = self.anonymousId;
+		}
 		self.xhr("https://api.segment.io/v1/screen", data);
 	}
 
@@ -131,6 +156,7 @@ function Osjs(){
 	/*this.import = function(data){
 		self.xhr("https://api.segment.io/v1/import", data);
 	}*/
+
 }
 
 var osjs = new Osjs();
