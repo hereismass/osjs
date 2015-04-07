@@ -2,6 +2,7 @@
 function Osjs(){
 	this.write_key = null;
 	this.anonymousId = null;
+	this.userId = null;
 	this.datas = [];
 	var self = this;
 
@@ -15,9 +16,13 @@ function Osjs(){
 			//if an anon id is passed, we save it
 			self.anonymousId = options.anonymousId;
 		}
-		else{
+		else if(!self.anonymousId){
 			//no anon id, we generate one in case we need it.
 			self.anonymousId = Math.floor(Math.random() * 0xfffffffffffff);
+		}
+
+		if(options.userId && !self.userId){
+			self.userId = options.userId;
 		}
 	}
 
@@ -38,6 +43,7 @@ function Osjs(){
 			// code for IE6, IE5
 		    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 		}
+		console.log(JSON.stringify(data, null,4));
 		xmlhttp.onreadystatechange = function(){
 			if(xmlhttp.readyState==4){
 				if(xmlhttp.status == 200){
@@ -112,6 +118,9 @@ function Osjs(){
 		if(!data.anonymousId){
 			data.anonymousId = self.anonymousId;
 		}
+		if(!data.userId && self.userId){
+			data.userId = self.userId;
+		}
 		self.xhr("https://api.segment.io/v1/identify", data);
 	}
 
@@ -119,6 +128,9 @@ function Osjs(){
 	this.group = function(data){
 		if(!data.anonymousId){
 			data.anonymousId = self.anonymousId;
+		}
+		if(!data.userId && self.userId){
+			data.userId = self.userId;
 		}
 		self.xhr("https://api.segment.io/v1/group", data);
 	}
@@ -128,6 +140,9 @@ function Osjs(){
 		if(!data.anonymousId){
 			data.anonymousId = self.anonymousId;
 		}
+		if(!data.userId && self.userId){
+			data.userId = self.userId;
+		}
 		self.xhr("https://api.segment.io/v1/track", data);
 	}
 
@@ -135,6 +150,9 @@ function Osjs(){
 	this.page = function(data){
 		if(!data.anonymousId){
 			data.anonymousId = self.anonymousId;
+		}
+		if(!data.userId && self.userId){
+			data.userId = self.userId;
 		}
 		self.xhr("https://api.segment.io/v1/page", data);
 	}
@@ -144,11 +162,17 @@ function Osjs(){
 		if(!data.anonymousId){
 			data.anonymousId = self.anonymousId;
 		}
+		if(!data.userId && self.userId){
+			data.userId = self.userId;
+		}
 		self.xhr("https://api.segment.io/v1/screen", data);
 	}
 
 	//alias
 	this.alias = function(data){
+		if(!data.userId && self.userId){
+			data.userId = self.userId;
+		}
 		self.xhr("https://api.segment.io/v1/alias", data);
 	}
 
