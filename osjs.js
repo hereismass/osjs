@@ -173,6 +173,10 @@ function Osjs(){
 		if(!data.userId && self.userId){
 			data.userId = self.userId;
 		}
+		if(!data.previousId && self.anonymousId){
+			//we link userId to anonId if no previous Id set
+			data.previousId = self.anonymousId;
+		}
 		self.xhr("https://api.segment.io/v1/alias", data);
 	}
 
