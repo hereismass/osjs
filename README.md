@@ -55,7 +55,7 @@ The main advantage of osjs is to have a queue system that allows to register eve
 				"revenue": 14.99
 			},
 			"context": {
-				ip": "24.5.68.47"
+				"ip": "24.5.68.47"
 			},
 			"timestamp": "2012-12-02T00:30:12.984Z"
 		});
